@@ -1,11 +1,16 @@
 
 import csv
 from getpass import getpass
+from importlib.resources import path
+import pathlib
 from time import sleep
 #from selenium.webdriver import Chrome
 from msedge.selenium_tools import Edge , EdgeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from PIL import Image
+import io
+import base64
 
 options = EdgeOptions()
 options.use_chromium = True
@@ -24,10 +29,10 @@ password.send_keys(my_password)
 password.send_keys(Keys.RETURN)
 sleep(5)
 driver.get("https://twitter.com/search?q=%23ReporteCovid19%20%23Guanajuato&src=typed_query&f=live")
-sleep(10)
-page_cards = driver.find_elements_by_xpath('//article[@data-testid="tweet"]')
 sleep(5)
-print(page_cards)
-sleep(500000)
-
+filtered_elements = driver.find_elements_by_xpath('//article[@data-testid="tweet"]')
+date = filtered_elements[0].find_element_by_xpath('.//div[2]/div[2]/div[2]').text
+images =  filtered_elements[0].find_element_by_xpath('.//div[@data-testid="tweetPhoto"]').screenshot_as_base64
+with open("Imagen_detection\imagenes\imagen_prueba.jpg", "wb") as fh:
+    fh.write(base64.decodebytes(bytes(images,encoding="utf-16") ))
 # close the browser window
