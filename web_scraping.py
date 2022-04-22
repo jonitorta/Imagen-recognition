@@ -16,11 +16,11 @@ driver = Edge(options=options)
 driver.get("https://twitter.com/login")
 sleep(5)
 username = driver.find_element_by_xpath('//input[@name="text"]')
-user = "@Joni50Li"
+user = "@J*****"
 username.send_keys(user)
 username.send_keys(Keys.RETURN)
 sleep(5)
-my_password = "contraseña123*"
+my_password = "c********"
 password = driver.find_element_by_xpath('//input[@name="password"]')
 password.send_keys(my_password)
 password.send_keys(Keys.RETURN)
