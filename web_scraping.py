@@ -8,15 +8,12 @@ from time import sleep
 from msedge.selenium_tools import Edge , EdgeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
-from PIL import Image
-import io
-import base64
+import pyautogui
 
 options = EdgeOptions()
 options.use_chromium = True
 driver = Edge(options=options)
 driver.get("https://twitter.com/login")
-driver.maximize_window()
 sleep(5)
 username = driver.find_element_by_xpath('//input[@name="text"]')
 user = "@Joni50Li"
@@ -32,7 +29,10 @@ driver.get("https://twitter.com/search?q=%23ReporteCovid19%20%23Guanajuato&src=t
 sleep(5)
 filtered_elements = driver.find_elements_by_xpath('//article[@data-testid="tweet"]')
 date = filtered_elements[0].find_element_by_xpath('.//div[2]/div[2]/div[2]').text
-images =  filtered_elements[0].find_element_by_xpath('.//div[@data-testid="tweetPhoto"]').screenshot_as_base64
-with open("Imagen_detection\imagenes\imagen_prueba.jpg", "wb") as fh:
-    fh.write(base64.decodebytes(bytes(images,encoding="utf-16") ))
-# close the browser window
+driver.fullscreen_window()
+images =  filtered_elements[0].find_element_by_xpath('.//div[@data-testid="tweetPhoto"]/img[1]').click()
+sleep(2)
+My_foto = pyautogui.screenshot()
+My_foto.save(r'Imagen_detection\imagenes\file_name.png')
+driver.find_element_by_xpath("//div[@aria-label='Cerrar']").click()
+sleep(10)
