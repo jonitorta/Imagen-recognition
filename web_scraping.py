@@ -14,23 +14,23 @@ options = EdgeOptions()
 options.use_chromium = True
 driver = Edge(options=options)
 driver.get("https://twitter.com/login")
-sleep(5)
+sleep(10)
 username = driver.find_element_by_xpath('//input[@name="text"]')
-user = "@J*****"
+user = "@Joni50Li"
 username.send_keys(user)
 username.send_keys(Keys.RETURN)
-sleep(5)
-my_password = "c********"
+sleep(3)
+my_password = "contraseña123*"
 password = driver.find_element_by_xpath('//input[@name="password"]')
 password.send_keys(my_password)
 password.send_keys(Keys.RETURN)
 sleep(3)
 driver.get("https://twitter.com/search?q=%23ReporteCovid19%20%23Guanajuato&src=typed_query&f=live")
 driver.maximize_window()
-sleep(5)
+sleep(3)
 
 
-def get_tweet_data (filtered_element):
+def get_tweet_data (filtered_element,contador = 0):
     
     try:
         date = filtered_element.find_element_by_xpath('.//div[2]/div[2]/div[2]').text
@@ -38,10 +38,11 @@ def get_tweet_data (filtered_element):
         return
     sleep(3)
     try:
-        images =  filtered_element.find_element_by_xpath('.//div[@data-testid="tweetPhoto"]/div[1]').click()
+        images =  filtered_element.find_element_by_xpath('.//div[@data-testid="tweetPhoto"]/div')
+        driver.execute_script("arguments[0].click();", images) 
         sleep(1)
         My_pic = pyautogui.screenshot()
-        My_pic.save(r'Imagen_detection\imagenes'+"/"+date+".png")
+        My_pic.save(r"Imagen_detection\imagenes\%i.png" %contador)
     except NoSuchElementException:
         return
     try:
@@ -53,11 +54,13 @@ def get_tweet_data (filtered_element):
 dates = []
 scrolling = True
 last_pos = driver.execute_script("return window.pageYOffset;")
+contador = 0
 
 while scrolling:
     filtered_elements = driver.find_elements_by_xpath('//article[@data-testid="tweet"]')
     for filtered_element in filtered_elements[-2:]:
-        image_info = get_tweet_data(filtered_element)
+        image_info = get_tweet_data(filtered_element,contador = contador)
+        contador +=1
         dates.append(image_info)
 
     scroll_atemp = 0
